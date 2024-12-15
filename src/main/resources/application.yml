@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: ai-chatbot
+
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/ai_chatbot
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: mysql
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+      database: sql
+      database-platform: org.hibernate.dialect.MySQLDialect
+
+chat:
+  api:
+    url: http://localhost:1234
+    completionEndpoint: /v1/chat/completions
+

@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class Model {
     private String id;
     private String object;
+    private String ownedBy;
     private String type;
     private String publisher;
     private String arch;

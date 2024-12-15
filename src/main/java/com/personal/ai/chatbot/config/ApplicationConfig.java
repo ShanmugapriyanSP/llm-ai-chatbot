@@ -13,4 +13,7 @@ public class ApplicationConfig {
 
     @Value("${chat.api.completionEndpoint}")
     private String completionEndpoint;
+
+    @Value("${chat.api.modelEndpoint}")
+    private String modelEndpoint;
 }

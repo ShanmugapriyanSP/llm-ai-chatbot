@@ -22,4 +22,5 @@ chat:
   api:
     url: http://localhost:1234
     completionEndpoint: /v1/chat/completions
+    modelEndpoint: /v1/models
 

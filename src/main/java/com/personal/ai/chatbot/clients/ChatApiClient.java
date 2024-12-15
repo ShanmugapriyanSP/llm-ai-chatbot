@@ -33,7 +33,13 @@ public class ChatApiClient {
                 .uri(config.getCompletionEndpoint())
                 .body(Mono.just(chatCompletionRequest), ChatCompletionRequest.class)
                 .retrieve()
-                .bodyToFlux(ChatCompletionResponse.class);
+                .bodyToFlux(ChatCompletionResponse.class)
+                .takeWhile(response -> {
+                    if (response.getChoices().getLast().getFinishReason() != null) {
+                        return !response.getChoices().getLast().getFinishReason().equals("stop");
+                    }
+                    return true;
+                });
     }
 
     public Mono<ModelResponse> getModels() {

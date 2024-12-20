@@ -2,6 +2,10 @@ spring:
   application:
     name: ai-chatbot
 
+  security:
+    jwt:
+      expiration: 3600000
+
   datasource:
     url: jdbc:mysql://127.0.0.1:3306/ai_chatbot
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -24,3 +28,12 @@ chat:
     completionEndpoint: /v1/chat/completions
     modelEndpoint: /v1/models
 
+logging:
+  level:
+    root: INFO
+    com.personal.ai.chatbot: DEBUG
+    org.springframework.security: DEBUG
+    org.springframework.web: DEBUG
+    org.springframework.http: DEBUG
+  file:
+    name: logs/application.log

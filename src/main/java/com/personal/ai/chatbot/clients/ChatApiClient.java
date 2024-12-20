@@ -43,7 +43,7 @@ public class ChatApiClient {
     }
 
     public Mono<ModelResponse> getModels() {
-        log.info("Fetching the loaded models");
+        log.info("Calling LLM to fetch the loaded models");
         return webClient.get()
                 .uri(config.getModelEndpoint())
                 .retrieve()

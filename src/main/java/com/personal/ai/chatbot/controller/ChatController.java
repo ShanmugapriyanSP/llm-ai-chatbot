@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.concurrent.CompletableFuture;
+
 
 @RestController
 @RequestMapping("/v1/api/chat")
@@ -22,14 +24,14 @@ public class ChatController {
 
     @GetMapping("/models")
     @ResponseStatus(HttpStatus.OK)
-    public Mono<ModelResponse> getModels() {
-        return chatService.getModels();
+    public CompletableFuture<Mono<ModelResponse>> getModels() {
+        return CompletableFuture.supplyAsync(chatService::getModels);
     }
 
     @PostMapping(value = "/completion", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public Flux<ChatCompletionResponse> chatCompletion(@RequestBody ChatCompletionRequest chatCompletionRequest) {
-        return chatService.streamChatCompletion(chatCompletionRequest);
+    public CompletableFuture<Flux<ChatCompletionResponse>> chatCompletion(@RequestBody ChatCompletionRequest chatCompletionRequest) {
+        return CompletableFuture.supplyAsync(() -> chatService.streamChatCompletion(chatCompletionRequest));
     }
 
     @GetMapping

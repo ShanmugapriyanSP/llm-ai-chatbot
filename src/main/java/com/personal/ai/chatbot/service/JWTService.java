@@ -26,7 +26,7 @@ public class JWTService {
     private final PrivateKey privateKey;
     private final PublicKey publicKey;
 
-    public String generateToken(User user) throws Exception {
+    public String generateToken(User user) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("user_id", user.getId());
         claims.put("subscription", "premium");
@@ -34,7 +34,7 @@ public class JWTService {
         return generateToken(claims, user);
     }
 
-    public String generateToken(Map<String, Object> claims, User user) throws Exception {
+    public String generateToken(Map<String, Object> claims, User user) {
         return Jwts.builder()
                 .claims(claims)
                 .issuer(ISSUER)
@@ -45,19 +45,19 @@ public class JWTService {
                 .compact();
     }
 
-    public String extractUsername(String jwtToken) throws Exception {
+    public String extractUsername(String jwtToken) {
         return extractClaim(jwtToken, Claims::getSubject);
     }
 
-    public Date extractExpiration(String jwtToken) throws Exception {
+    public Date extractExpiration(String jwtToken) {
         return extractClaim(jwtToken, Claims::getExpiration);
     }
 
-    private <T> T extractClaim(String jwtToken, Function<Claims, T> claimsResolver) throws Exception {
+    private <T> T extractClaim(String jwtToken, Function<Claims, T> claimsResolver) {
         return claimsResolver.apply(extractAllClaims(jwtToken));
     }
 
-    private Claims extractAllClaims(String jwtToken) {
+    public Claims extractAllClaims(String jwtToken) {
         return Jwts.parser()
                 .verifyWith(publicKey)
                 .build()
@@ -71,7 +71,7 @@ public class JWTService {
         return (username.equals(user.getUsername()) && !isTokenExpired(jwtToken));
     }
 
-    private boolean isTokenExpired(String jwtToken) throws Exception {
+    public boolean isTokenExpired(String jwtToken) {
         log.info("Token expiration - {}, Current time - {}", extractExpiration(jwtToken), new Date());
         return extractExpiration(jwtToken).before(new Date());
     }

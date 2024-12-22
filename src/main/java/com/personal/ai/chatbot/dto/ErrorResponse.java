@@ -1,16 +1,17 @@
 package com.personal.ai.chatbot.dto;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class Message {
-
-    private String role;
-    private String content;
+public class ErrorResponse {
+    private String message;
+    private int status;
+    private String error;
 }

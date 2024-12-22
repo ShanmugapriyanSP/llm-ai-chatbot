@@ -1,20 +1,19 @@
 package com.personal.ai.chatbot.config;
 
+import com.personal.ai.chatbot.components.AuthenticationManager;
 import com.personal.ai.chatbot.components.CustomAuthenticationEntryPoint;
-import com.personal.ai.chatbot.components.JWTAuthenticationFilter;
+import com.personal.ai.chatbot.components.SecurityContextRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;
+import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
+import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.web.server.SecurityWebFilterChain;
 
 @Configuration
-@EnableWebSecurity
+@EnableWebFluxSecurity
+@EnableReactiveMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
 
@@ -29,25 +28,27 @@ public class SecurityConfig {
             "/swagger-ui.html"
     };
 
-    private final AuthenticationProvider authenticationProvider;
-    private final JWTAuthenticationFilter jwtAuthenticationFilter;
+    private final AuthenticationManager authenticationManager;
+    private final SecurityContextRepository securityContextRepository;
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+    public SecurityWebFilterChain securityFilterChain(ServerHttpSecurity httpSecurity) {
         return httpSecurity
-                .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(req ->
-                        req.requestMatchers(WHITE_LIST_URL)
+                .csrf(ServerHttpSecurity.CsrfSpec::disable)
+                .exceptionHandling(exceptionHandlingSpec ->
+                        exceptionHandlingSpec.authenticationEntryPoint(customAuthenticationEntryPoint))
+                .csrf(ServerHttpSecurity.CsrfSpec::disable)
+                .formLogin(ServerHttpSecurity.FormLoginSpec::disable)
+                .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
+                .authorizeExchange(req ->
+                        req.pathMatchers(WHITE_LIST_URL)
                                 .permitAll()
-                                .anyRequest()
+                                .anyExchange()
                                 .authenticated()
                 )
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .exceptionHandling(httpSecurityExceptionHandlingConfigurer ->
-                        httpSecurityExceptionHandlingConfigurer.authenticationEntryPoint(customAuthenticationEntryPoint))
+                .authenticationManager(authenticationManager)
+                .securityContextRepository(securityContextRepository)
                 .build();
     }
 }

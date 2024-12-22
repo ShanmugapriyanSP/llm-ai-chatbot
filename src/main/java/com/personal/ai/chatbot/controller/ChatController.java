@@ -15,7 +15,6 @@ import reactor.core.publisher.Mono;
 @RestController
 @RequestMapping("/v1/api/chat")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:3000")
 public class ChatController {
 
     private final ChatService chatService;

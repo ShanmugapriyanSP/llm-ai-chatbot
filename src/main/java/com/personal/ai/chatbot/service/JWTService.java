@@ -53,6 +53,11 @@ public class JWTService {
         return extractClaim(jwtToken, Claims::getExpiration);
     }
 
+    public Long extractUserId(String jwtToken) {
+        Claims claims = extractAllClaims(jwtToken);
+        return claims.get("user_id", Long.class);
+    }
+
     private <T> T extractClaim(String jwtToken, Function<Claims, T> claimsResolver) {
         return claimsResolver.apply(extractAllClaims(jwtToken));
     }

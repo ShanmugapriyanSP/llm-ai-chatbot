@@ -13,9 +13,9 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -34,11 +34,11 @@ public class ChatService {
                 .model(null)
                 .systemMessage(null)
                 .messages(Collections.emptyList())
-                .createdAt(Instant.now())
-                .updatedAt(Instant.now())
+                .createdAt(new Date())
+                .updatedAt(new Date())
                 .build();
 
-        return chatHistoryRepository.save(chatHistory).map(chat -> new ChatCreationResponse(chat.getId().toHexString()));
+        return chatHistoryRepository.save(chatHistory).map(chat -> new ChatCreationResponse(chat.getId()));
     }
 
     public Flux<ChatCompletionResponse> streamChatCompletion(ChatRequest chatRequest, Long userId) {

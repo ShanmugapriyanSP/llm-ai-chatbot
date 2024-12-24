@@ -1,6 +1,8 @@
 package com.personal.ai.chatbot.controller;
 
 import com.personal.ai.chatbot.dto.*;
+import com.personal.ai.chatbot.model.ChatHistory;
+import com.personal.ai.chatbot.service.ChatHistoryService;
 import com.personal.ai.chatbot.service.ChatService;
 import com.personal.ai.chatbot.service.JWTService;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +20,7 @@ import reactor.core.publisher.Mono;
 public class ChatController {
 
     private final ChatService chatService;
+    private final ChatHistoryService chatHistoryService;
     private final JWTService jwtService;
 
     @GetMapping("/models")
@@ -37,6 +40,12 @@ public class ChatController {
     public Flux<ChatCompletionResponse> chatCompletion(@RequestBody ChatRequest chatRequest,
                                                        @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
         return chatService.streamChatCompletion(chatRequest, getUserId(authHeader));
+    }
+
+    @GetMapping("/history")
+    @ResponseStatus(HttpStatus.OK)
+    public Flux<ChatHistory> chatHistory(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
+        return chatHistoryService.getChatHistory(getUserId(authHeader));
     }
 
     @GetMapping

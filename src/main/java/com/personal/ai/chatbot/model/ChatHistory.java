@@ -4,12 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.data.mongodb.core.mapping.FieldType;
 
-import java.time.Instant;
+import java.util.Date;
 import java.util.List;
 
 @Document(collection = "chats")
@@ -20,14 +21,15 @@ import java.util.List;
 public class ChatHistory {
 
     @Id
-    private ObjectId id;
+    @Field(targetType = FieldType.OBJECT_ID)
+    private String id;
     @Indexed
     private Long userId;
     private String model;
     private String systemMessage;
     private List<Message> messages;
-    private Instant createdAt;
-    private Instant updatedAt;
+    private Date createdAt;
+    private Date updatedAt;
 
     @Data
     @Builder
@@ -37,7 +39,6 @@ public class ChatHistory {
         private String messageId;
         private MessageType type;
         private String content;
-        private Instant timestamp;
+        private Date timestamp;
     }
 }
-

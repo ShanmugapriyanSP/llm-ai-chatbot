@@ -1,8 +1,8 @@
 package com.personal.ai.chatbot.components;
 
+import com.personal.ai.chatbot.exceptions.InvalidTokenException;
 import com.personal.ai.chatbot.service.JWTService;
 import io.jsonwebtoken.Claims;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -25,7 +25,7 @@ public class AuthenticationManager implements ReactiveAuthenticationManager {
         String username = jwtService.extractUsername(authToken);
         return Mono.just(!jwtService.isTokenExpired(authToken))
                 .filter(valid -> valid)
-                .switchIfEmpty(Mono.empty())
+                .switchIfEmpty(Mono.error(new InvalidTokenException("Token is expired! Login again...")))
                 .map(valid -> {
                     Claims claims = jwtService.extractAllClaims(authToken);
                     String role = claims.get("role", String.class);

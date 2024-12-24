@@ -14,6 +14,11 @@ spring:
     username: root
     password: mysql
 
+  data:
+    mongodb:
+      uri: mongodb://127.0.0.1:27017
+      database: chat_history
+
   sql:
     init:
       mode: always
@@ -31,5 +36,6 @@ logging:
     org.springframework.security: TRACE
     org.springframework.web: DEBUG
     org.springframework.http: DEBUG
+    org.springframework.data.mongodb.core.ReactiveMongoTemplate: TRACE
   file:
     name: logs/application.log

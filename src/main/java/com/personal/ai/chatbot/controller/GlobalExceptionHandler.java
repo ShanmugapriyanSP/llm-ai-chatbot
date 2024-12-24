@@ -3,6 +3,7 @@ package com.personal.ai.chatbot.controller;
 
 import com.personal.ai.chatbot.dto.ErrorResponse;
 import com.personal.ai.chatbot.exceptions.EmailAlreadyExistsException;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,6 +41,17 @@ public class GlobalExceptionHandler {
                 .body(ErrorResponse.builder()
                         .message("Invalid request body")
                         .status(HttpStatus.BAD_REQUEST.value())
+                        .error(ex.getLocalizedMessage())
+                        .build()
+                );
+    }
+
+    @ExceptionHandler(ExpiredJwtException.class)
+    public ResponseEntity<ErrorResponse> handleExpiredJwtToken(ExpiredJwtException ex) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(ErrorResponse.builder()
+                        .message("Token is expired! Login again")
+                        .status(HttpStatus.UNAUTHORIZED.value())
                         .error(ex.getLocalizedMessage())
                         .build()
                 );

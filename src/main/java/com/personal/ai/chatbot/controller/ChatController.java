@@ -15,7 +15,7 @@ import reactor.core.publisher.Mono;
 
 
 @RestController
-@RequestMapping("/v1/api/chat")
+@RequestMapping("/api/v1/chat")
 @RequiredArgsConstructor
 public class ChatController {
 

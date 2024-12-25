@@ -72,6 +72,9 @@ public class ChatHistoryService {
     }
 
     public Flux<ChatHistory> getChatHistory(Long userId) {
-        return chatHistoryRepository.findByUserId(userId);
+        return chatHistoryRepository.findByUserId(userId)
+                .filter(chatHistory -> !chatHistory.getMessages().isEmpty())
+                .collectList()
+                .flatMapMany(Flux::fromIterable);
     }
 }

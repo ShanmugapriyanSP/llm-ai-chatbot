@@ -29,6 +29,12 @@ chat:
     completionEndpoint: /v1/chat/completions
     modelEndpoint: /v1/models
 
+voice:
+  api:
+    url: http://127.0.0.1:5000
+    generateAudioEndpoint: /generate-audio
+    generateAudioStreamEndpoint: /generate-audio-stream
+
 logging:
   level:
     root: INFO

@@ -32,6 +32,15 @@ public class ApplicationConfig {
     @Value("${chat.api.modelEndpoint}")
     private String modelEndpoint;
 
+    @Value("${voice.api.url}")
+    private String voiceApiUrl;
+
+    @Value("${voice.api.generateAudioEndpoint}")
+    private String generateAudioEndpoint;
+
+    @Value("${voice.api.generateAudioStreamEndpoint}")
+    private String generateAudioStreamEndpoint;
+
     @Bean
     public ObjectMapper objectMapper() {
         return new ObjectMapper();
